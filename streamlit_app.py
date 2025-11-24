@@ -12,6 +12,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress all TF logging
 
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 from utils import (
     parse_fasta,
@@ -254,7 +255,8 @@ LQVGQVELGGGPGAGSLQPLALEGSLQKRGIVEQCCTSICSLYQLENYCN""",
 
             with tab1:
                 st.subheader("Interactive Protein Detectability Map")
-                st.markdown(html_viz, unsafe_allow_html=True)
+                # Use components.html to render the raw HTML rather than showing it as escaped markdown
+                components.html(html_viz, height=650, scrolling=True)
 
                 st.info("""
                 **Legend:**
