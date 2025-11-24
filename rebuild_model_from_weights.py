@@ -54,7 +54,7 @@ except Exception as e:
 
 # Step 2: Load weights from checkpoint
 print("\n2. Loading weights from checkpoint...")
-weights_path = parent_dir / "notebooks" / "output" / "weights" / "new_base_model" / "base_model_weights_detectability"
+weights_path = parent_dir / "notebooks" / "output" / "weights" / "new_base_model" / "base_model_weights_detectability" / "base_model_weights_detectability"
 
 if not weights_path.parent.exists():
     print(f"   ❌ Weights directory not found: {weights_path.parent}")

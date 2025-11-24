@@ -46,7 +46,7 @@ def encode_peptide(sequence, max_len=40):
     return np.array([encoded], dtype=np.int32)
 
 # Weights path
-weights_path = Path(__file__).parent.parent / 'notebooks' / 'output' / 'weights' / 'new_base_model' / 'base_model_weights_detectability'
+weights_path = Path(__file__).parent.parent / 'notebooks' / 'output' / 'weights' / 'new_base_model' / 'base_model_weights_detectability' / 'base_model_weights_detectability'
 
 print(f"\nWeights path: {weights_path}")
 print(f"Weights exist: {weights_path.parent.exists()}")
