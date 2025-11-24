@@ -1,0 +1,14 @@
+# Streamlit App Requirements
+# ===========================
+
+# Core dependencies
+streamlit==1.28.0
+tensorflow==2.15.0
+pandas==2.0.3
+numpy==1.24.3
+
+# DLOmix - required for loading the detectability model
+dlomix>=0.0.1
+
+# Optional: for better performance
+# protobuf==3.20.3
