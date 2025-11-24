@@ -37,8 +37,8 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
     for peptide in peptides_with_predictions:
         color = flyer_color if peptide['is_flyer'] else non_flyer_color
         tooltip = (
-            f"Peptide: {peptide['sequence']}\\n"
-            f"Class: {peptide['predicted_class']}\\n"
+            f"Peptide: {peptide['sequence']}\n"
+            f"Class: {peptide['predicted_class']}\n"
             f"Position: {peptide['start'] + 1}-{peptide['end']}"
         )
         for pos in range(peptide['start'], peptide['end']):
@@ -56,9 +56,9 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
         .peptide-aa::after {{
             content: attr(data-tooltip);
             position: absolute;
-            bottom: 110%;
+            top: 120%;
             left: 50%;
-            transform: translateX(-50%) translateY(6px);
+            transform: translate(-50%, -6px);
             background: rgba(0, 0, 0, 0.85);
             color: #fff;
             padding: 6px 8px;
@@ -78,20 +78,20 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
         .peptide-aa::before {{
             content: '';
             position: absolute;
-            bottom: 102%;
+            top: 108%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -2px);
             border-width: 6px;
             border-style: solid;
-            border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+            border-color: transparent transparent rgba(0, 0, 0, 0.85) transparent;
             opacity: 0;
-            transition: opacity 120ms ease;
+            transition: opacity 120ms ease, transform 120ms ease;
             z-index: 9;
         }}
         .peptide-aa:hover::after,
         .peptide-aa:hover::before {{
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translate(-50%, 0);
         }}
         </style>
         <h2 style="color: #333; text-align: center; margin-bottom: 20px;">
