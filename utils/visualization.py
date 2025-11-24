@@ -1,5 +1,7 @@
 """Visualization utilities for protein detectability results."""
 
+import html
+
 import pandas as pd
 
 
@@ -34,14 +36,64 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
     # Color each amino acid based on its peptide's detectability
     for peptide in peptides_with_predictions:
         color = flyer_color if peptide['is_flyer'] else non_flyer_color
-        tooltip = f"Peptide: {peptide['sequence']}\\nClass: {peptide['predicted_class']}\\nPosition: {peptide['start']}-{peptide['end']}"
+        tooltip = (
+            f"Peptide: {peptide['sequence']}\\n"
+            f"Class: {peptide['predicted_class']}\\n"
+            f"Position: {peptide['start'] + 1}-{peptide['end']}"
+        )
         for pos in range(peptide['start'], peptide['end']):
             colors[pos] = color
             peptide_info[pos] = tooltip
 
     # Generate HTML
-    html = f"""
+    html_viz = f"""
     <div style="font-family: Arial, sans-serif; max-width: 1200px; margin: 20px auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <style>
+        /* Explicit tooltip styling so hover info always renders inside the embedded iframe */
+        .peptide-aa {{
+            position: relative;
+        }}
+        .peptide-aa::after {{
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%) translateY(6px);
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.3;
+            white-space: pre-line;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 120ms ease, transform 120ms ease;
+            min-width: 170px;
+            max-width: 240px;
+            z-index: 10;
+        }}
+        .peptide-aa::before {{
+            content: '';
+            position: absolute;
+            bottom: 102%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+            opacity: 0;
+            transition: opacity 120ms ease;
+            z-index: 9;
+        }}
+        .peptide-aa:hover::after,
+        .peptide-aa:hover::before {{
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }}
+        </style>
         <h2 style="color: #333; text-align: center; margin-bottom: 20px;">
             Tryptic Peptide Detectability Map: {protein_id}
         </h2>
@@ -78,7 +130,7 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
         end_idx = min(start_idx + chars_per_line, seq_len)
 
         # Line container with fixed height
-        html += f"""
+        html_viz += f"""
         <div style="display: flex; align-items: center; margin-bottom: 8px; min-height: 30px;">
             <div style="display: flex; gap: 0;">
         """
@@ -88,10 +140,12 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
             aa = protein_sequence[i]
             bg_color = colors[i]
             tooltip = peptide_info[i]
+            # Escape tooltip to avoid breaking HTML attributes; preserve newlines for display
+            safe_tooltip = html.escape(tooltip)
 
             # Create the amino acid span with tooltip
-            html += f"""
-                <span title="{tooltip}" style="
+            html_viz += f"""
+                <span class="peptide-aa" data-tooltip="{safe_tooltip}" style="
                     display: inline-block;
                     width: 16px;
                     height: 24px;
@@ -110,7 +164,7 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
         # Add padding spaces to maintain consistent line length (60 chars)
         remaining = chars_per_line - (end_idx - start_idx)
         for _ in range(remaining):
-            html += f"""
+            html_viz += f"""
                 <span style="
                     display: inline-block;
                     width: 16px;
@@ -119,7 +173,7 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
             """
 
         # Close sequence div and add position range on the right
-        html += f"""
+        html_viz += f"""
             </div>
             <div style="padding-left: 15px; font-family: 'Courier New', monospace; font-size: 12px; color: #666; white-space: nowrap;">
                 {start_idx + 1}-{end_idx}
@@ -128,17 +182,17 @@ def generate_html_visualization(protein_sequence, peptides_with_predictions, pro
         """
 
     # Close main container
-    html += """
+    html_viz += """
         </div>
 
         <div style="margin-top: 20px; padding: 15px; background-color: white; border-radius: 5px; font-size: 13px; color: #666;">
-            <strong>Info:</strong> Hover over amino acids to see peptide details.
+            <strong>Info:</strong> Hover over any colored amino acid to see its peptide, class, and position.
             Each line shows exactly 60 amino acids with consistent height and left alignment.
         </div>
     </div>
     """
 
-    return html
+    return html_viz
 
 
 def create_summary_table(peptides_with_predictions):
