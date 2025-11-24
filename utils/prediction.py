@@ -40,7 +40,7 @@ def load_model():
         If model weights are not found
     """
     # Path to model weights (not SavedModel format)
-    weights_path = Path(__file__).parent.parent.parent / 'notebooks' / 'output' / 'weights' / 'new_base_model' / 'base_model_weights_detectability'
+    weights_path = Path(__file__).parent.parent / 'notebooks' / 'output' / 'weights' / 'new_base_model' / 'base_model_weights_detectability'
 
     if not weights_path.parent.exists():
         raise FileNotFoundError(
