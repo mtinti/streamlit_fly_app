@@ -194,11 +194,6 @@ LQVGQVELGGGPGAGSLQPLALEGSLQKRGIVEQCCTSICSLYQLENYCN""",
 
             predictions = predict_batch(peptides, model)
 
-            # DEBUG: Check predictions
-            st.write(f"DEBUG: Generated {len(predictions)} predictions")
-            st.write(f"DEBUG: First prediction: {predictions[0]}")
-            st.write(f"DEBUG: Flyer count: {sum(1 for p in predictions if p['is_flyer'])}")
-
             # Step 6: Calculate statistics
             status_text.text("📊 Calculating statistics...")
             progress_bar.progress(80)
