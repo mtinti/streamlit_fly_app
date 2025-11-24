@@ -13,4 +13,5 @@ __all__ = [
     'predict_batch',
     'generate_html_visualization',
     'create_summary_table',
+    'calculate_coverage_stats',
 ]
