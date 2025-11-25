@@ -2,7 +2,7 @@
 
 A web application for predicting peptide detectability in mass spectrometry experiments using deep learning.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app-url.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://flyapp.streamlit.app/)
 
 ## 🎯 Overview
 
